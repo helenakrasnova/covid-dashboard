@@ -1,7 +1,7 @@
 const path = require('path');
 
 const conf = {
-  entry: ['./script.js'],
+  entry: ['@babel/polyfill', './script.js'],
   devtool: 'eval-source-map',
   output: {
     path: path.resolve(__dirname, './dist'),
