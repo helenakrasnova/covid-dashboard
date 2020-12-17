@@ -1,11 +1,28 @@
 import ListServices from '../../services/ListService';
+import GlobalStatistics from './globalStatitic';
 
 export default class List {
   constructor() {
+    this.globalMethods = new GlobalStatistics();
     this.listServices = new ListServices();
+    this.sortedCountry = [];
+    this.flags = {
+      listDataOrder: 0,
+      isDayData: false,
+      isPopulationData: false,
+    };
+    this.populationCoef = 100000;
+    this.headerTitles = ['Total Cases', 'Total Deaths', 'Total Recovered'];
   }
 
-  createList(listItems) {
+  async createList(listItems) {
+    const allCasesBlock = await new GlobalStatistics(this.listServices.allCases)
+      .createGlobalSatisticBlock();
+    const switchButton = allCasesBlock.childNodes[0].childNodes[0].childNodes[2];
+    switchButton.addEventListener('click', () => {
+      this.flags.isPopulationData = !this.flags.isPopulationData;
+      this.setPopulCoefStatistics();
+    });
     const container = document.createElement('section');
     const listWrapper = document.createElement('div');
     const list = document.createElement('ul');
@@ -15,8 +32,10 @@ export default class List {
     listWrapper.appendChild(list);
     listItems.forEach((item) => list.appendChild(item));
     listWrapper.appendChild(list);
+    container.appendChild(allCasesBlock);
     container.appendChild(this.createListHeader());
     container.appendChild(listWrapper);
+
     return container;
   }
 
@@ -24,16 +43,43 @@ export default class List {
     const listHeaderWrapper = document.createElement('div');
     const listHeader = document.createElement('div');
     const listHeaderText = document.createElement('span');
+    const nextItem = document.createElement('img');
+    const prevItem = document.createElement('img');
+    nextItem.classList.add('next-arrow');
+    nextItem.setAttribute('src', './assets/List/img/nextArr.svg');
+    nextItem.setAttribute('width', '16');
+    nextItem.setAttribute('height', '16');
+    prevItem.classList.add('prev-arrow');
+    prevItem.setAttribute('src', './assets/List/img/prevArr.svg');
+    prevItem.setAttribute('width', '16');
+    prevItem.setAttribute('height', '16');
     listHeaderText.classList.add('header-text');
-    listHeaderText.textContent = 'Cases by Country/Region/District';
+    listHeaderText.addEventListener('click', () => {
+      this.setDayData();
+    });
+    listHeaderText.textContent = 'Total Cases';
+    if (this.flags.listDataOrder === 1) {
+      listHeaderText.textContent = 'Total Deaths';
+    } else if (this.flags.listDataOrder === 2) {
+      listHeaderText.textContent = 'Total Recovered';
+    }
     listHeaderWrapper.classList.add('list-header-wrapper');
     listHeader.classList.add('list-header');
+    listHeaderWrapper.appendChild(prevItem);
     listHeaderWrapper.appendChild(listHeaderText);
+    listHeaderWrapper.appendChild(nextItem);
     listHeader.appendChild(listHeaderWrapper);
+    nextItem.addEventListener('click', () => {
+      this.addNextListData();
+    });
+    prevItem.addEventListener('click', () => {
+      this.prevListData();
+    });
     return listHeader;
   }
 
   createListItems(array) {
+    const order = this.flags.listDataOrder;
     const listItemArray = [];
     array.forEach((item) => {
       const li = document.createElement('li');
@@ -43,14 +89,19 @@ export default class List {
       caseCountryWrapper.classList.add('case-country-wrapper');
       spanCountry.classList.add('country');
       spanCases.classList.add('cases');
-      spanCountry.textContent = item.Country;
-      if (item.Country.length >= 24) {
-        spanCountry.textContent = item.CountryCode;
+      spanCountry.textContent = item.country;
+      spanCountry.classList.add(item.countryCode);
+      if (item.country.length >= 24) {
+        spanCountry.textContent = item.countryCode;
       }
-      if (item.Country === 'Bosnia and Herzegovina') {
-        spanCountry.textContent = 'Bosnia';
+
+      spanCases.textContent = item.confirmed;
+      if (order === 1) {
+        spanCases.textContent = item.deaths;
       }
-      spanCases.textContent = item.TotalConfirmed;
+      if (order === 2) {
+        spanCases.textContent = item.recovered;
+      }
       li.classList.add('list-item');
       caseCountryWrapper.appendChild(spanCases);
       caseCountryWrapper.appendChild(spanCountry);
@@ -58,6 +109,7 @@ export default class List {
       li.appendChild(this.getCountryFlag(item));
       listItemArray.push(li);
     });
+    this.sortedCountry = listItemArray;
     return listItemArray;
   }
 
@@ -76,16 +128,181 @@ export default class List {
 
   getCountryFlag(country) {
     const flag = document.createElement('img');
-    flag.classList.add(`${country.CountryCode}-flag`);
-    flag.setAttribute('alt', `${country.Country} flag`);
-    flag.setAttribute('src', `https://www.countryflags.io/${country.CountryCode}/flat/32.png`);
+    flag.classList.add(`${country.countryCode}-flag`);
+    flag.setAttribute('alt', `${country.country} flag`);
+    flag.setAttribute('src', `https://www.countryflags.io/${country.countryCode}/flat/32.png`);
     return flag;
   }
 
+  async addNextListData() {
+    this.flags.listDataOrder += 1;
+    if (this.flags.listDataOrder > 2 || this.flags.listDataOrder < 0) {
+      this.flags.listDataOrder = 0;
+    }
+    const header = document.querySelector('.list-header').childNodes[0].childNodes[1];
+    const listWrapper = document.querySelector('.main-list');
+    const { globalData } = this.listServices;
+    listWrapper.innerHTML = '';
+    if (this.flags.listDataOrder === 0) {
+      header.textContent = this.headerTitles[0];
+      this.removeChildren(listWrapper);
+      let currentArray = await this.sortListArray(this.createListItems(globalData));
+      if (this.flags.isDayData) {
+        currentArray = await this.sortListArray(this.createListItems(this.listServices.dayData));
+      }
+      currentArray.forEach((item) => {
+        listWrapper.appendChild(item);
+      });
+      this.setPopulCoefStatistics();
+    }
+    if (this.flags.listDataOrder === 1) {
+      header.textContent = this.headerTitles[1];
+      this.removeChildren(listWrapper);
+      let currentArray = await this.sortListArray(this.createListItems(globalData));
+      if (this.flags.isDayData) {
+        currentArray = await this.sortListArray(this.createListItems(this.listServices.dayData));
+      }
+      currentArray.forEach((item) => {
+        listWrapper.appendChild(item);
+      });
+      this.setPopulCoefStatistics();
+    } else if (this.flags.listDataOrder === 2) {
+      header.textContent = this.headerTitles[2];
+      listWrapper.innerHTML = '';
+      let currentArray = await this.sortListArray(this.createListItems(globalData));
+      if (this.flags.isDayData) {
+        currentArray = await this.sortListArray(this.createListItems(this.listServices.dayData));
+      }
+      currentArray.forEach((item) => {
+        listWrapper.appendChild(item);
+      });
+      this.setPopulCoefStatistics();
+    }
+  }
+
+  async prevListData() {
+    this.flags.listDataOrder -= 1;
+    if (this.flags.listDataOrder < 0) {
+      this.flags.listDataOrder = 2;
+    }
+    const { globalData } = this.listServices;
+    const header = document.querySelector('.list-header').childNodes[0].childNodes[1];
+    const listWrapper = document.querySelector('.main-list');
+    if (this.flags.listDataOrder === 0) {
+      header.textContent = this.headerTitles[0];
+      let currentArray = await this.sortListArray(this.createListItems(globalData));
+      if (this.flags.isDayData) {
+        currentArray = await this.sortListArray(this.createListItems(this.listServices.dayData));
+      }
+      listWrapper.innerHTML = '';
+      currentArray.forEach((item) => {
+        listWrapper.appendChild(item);
+      });
+      this.setPopulCoefStatistics();
+    } else if (this.flags.listDataOrder === 1) {
+      header.textContent = this.headerTitles[1];
+      let currentArray = await this.sortListArray(this.createListItems(globalData));
+      if (this.flags.isDayData) {
+        currentArray = await this.sortListArray(this.createListItems(this.listServices.dayData));
+      }
+      listWrapper.innerHTML = '';
+      currentArray.forEach((item) => {
+        listWrapper.appendChild(item);
+      });
+      this.setPopulCoefStatistics();
+    } else if (this.flags.listDataOrder === 2) {
+      header.textContent = this.headerTitles[2];
+      let currentArray = await this.sortListArray(this.createListItems(globalData));
+      listWrapper.innerHTML = '';
+      if (this.flags.isDayData) {
+        currentArray = await this.sortListArray(this.createListItems(this.listServices.dayData));
+      }
+      currentArray.forEach((item) => {
+        listWrapper.appendChild(item);
+      });
+      this.setPopulCoefStatistics();
+    }
+  }
+
+  removeChildren(myNode) {
+    while (myNode.firstChild) {
+      myNode.removeChild(myNode.firstChild);
+    }
+  }
+
+  async setDayData() {
+    this.flags.isDayData = !this.flags.isDayData;
+    const { dayData } = this.listServices;
+    const { globalData } = this.listServices;
+    const wrapper = document.querySelector('.main-list');
+    const headerText = document.querySelector('.list-header').childNodes[0].childNodes[1];
+    if (this.flags.isDayData) {
+      this.headerTitles = ['Day Cases', 'Day Deaths', 'Day Recovered'];
+      headerText.textContent = this.headerTitles[this.flags.listDataOrder];
+      const currentArray = await this.sortListArray(this.createListItems(dayData));
+      wrapper.innerHTML = '';
+      currentArray.forEach((item) => {
+        wrapper.appendChild(item);
+      });
+    } else {
+      this.headerTitles = ['Total Cases', 'Total Deaths', 'Total Recovered'];
+      headerText.textContent = this.headerTitles[this.flags.listDataOrder];
+      const currentArray = await this.sortListArray(this.createListItems(globalData));
+      wrapper.innerHTML = '';
+      currentArray.forEach((item) => {
+        wrapper.appendChild(item);
+      });
+    }
+  }
+
+  async setPopulCoefStatistics() {
+    const populationData = this.listServices.populationCoefData;
+    const headerText = document.querySelector('.list-header').childNodes[0].childNodes[1];
+    if (this.flags.listDataOrder === 0 && this.flags.isPopulationData) {
+      headerText.textContent = 'Cases on 100000';
+      const wrapper = document.querySelector('.main-list');
+      const populationArray = await this.sortListArray(this.createListItems(populationData));
+      wrapper.innerHTML = '';
+      populationArray.forEach((item) => {
+        wrapper.appendChild(item);
+      });
+    } else if (this.flags.listDataOrder === 1 && this.flags.isPopulationData) {
+      headerText.textContent = 'Deaths on 100000';
+      const wrapper = document.querySelector('.main-list');
+      const populationArray = await this.sortListArray(this.createListItems(populationData));
+      wrapper.innerHTML = '';
+      populationArray.forEach((item) => {
+        wrapper.appendChild(item);
+      });
+    } else if (this.flags.listDataOrder === 2 && this.flags.isPopulationData) {
+      headerText.textContent = 'Recover on 100000';
+      const wrapper = document.querySelector('.main-list');
+      const populationArray = await this.sortListArray(this.createListItems(populationData));
+      wrapper.innerHTML = '';
+      populationArray.forEach((item) => {
+        wrapper.appendChild(item);
+      });
+    }
+    if (!this.flags.isPopulationData && !this.flags.isDayData) {
+      const { globalData } = this.listServices;
+      headerText.textContent = this.headerTitles[this.flags.listDataOrder];
+      const wrapper = document.querySelector('.main-list');
+      const populationArray = await this.sortListArray(this.createListItems(globalData));
+      wrapper.innerHTML = '';
+      populationArray.forEach((item) => {
+        wrapper.appendChild(item);
+      });
+    }
+  }
+
   async initList() {
-    const dataFromApi = await this.listServices.getTotalCases();
-    const listItems = this.sortListArray(this.createListItems(dataFromApi));
+    await this.listServices.getTotalCases();
+    await this.listServices.getOneDayCases();
+    const globalCountry = this.listServices.globalData;
+    const listItems = this.sortListArray(this.createListItems(globalCountry));
     const list = this.createList(listItems);
+    this.sortedCountry = listItems;
+
     return list;
   }
 }
