@@ -11,7 +11,7 @@ export default class TableService {
     const results = await this.getSummary();
     const total = results.Countries.map((item) => {
       const tableRow = new TableRowModel(
-        item.Country, item.TotalConfirmed, item.TotalRecovered, item.TotalDeaths,
+        item.Country, item.TotalConfirmed, item.TotalRecovered, item.TotalDeaths, item.Slug,
       );
       return tableRow;
     });
@@ -22,7 +22,7 @@ export default class TableService {
     const results = await this.getSummary();
     const lastDay = results.Countries.map((item) => {
       const tableRow = new TableRowModel(
-        item.Country, item.NewConfirmed, item.NewRecovered, item.NewDeaths,
+        item.Country, item.NewConfirmed, item.NewRecovered, item.NewDeaths, item.Slug,
       );
       return tableRow;
     });
