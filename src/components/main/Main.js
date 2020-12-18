@@ -1,7 +1,5 @@
 import Table from '../table/Table';
-import List from '../list/List';
-
-export default class Main {
+import List from '../list/List';export default class Main {
   constructor() {
     this.table = new Table();
     this.list = new List('countries');
@@ -9,7 +7,8 @@ export default class Main {
 
   async init() {
     this.render();
-    const list = await this.list.initList();
+    await this.table.init();
+   await this.list.initList();
 
   }
 
