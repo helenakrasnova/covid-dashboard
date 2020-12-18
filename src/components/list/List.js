@@ -296,13 +296,14 @@ export default class List {
   }
 
   async initList() {
+    const container = document.querySelector('.container');
     await this.listServices.getTotalCases();
     await this.listServices.getOneDayCases();
     const globalCountry = this.listServices.globalData;
     const listItems = this.sortListArray(this.createListItems(globalCountry));
-    const list = this.createList(listItems);
+    const list = await this.createList(listItems);
     this.sortedCountry = listItems;
-
+    container.appendChild(list)
     return list;
   }
 }

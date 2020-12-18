@@ -1,15 +1,16 @@
+import Table from '../table/Table';
 import List from '../list/List';
 
 export default class Main {
   constructor() {
+    this.table = new Table();
     this.list = new List('countries');
   }
 
   async init() {
     this.render();
-    const container = document.querySelector('.container');
     const list = await this.list.initList();
-    container.appendChild(list);
+
   }
 
   render = () => {
