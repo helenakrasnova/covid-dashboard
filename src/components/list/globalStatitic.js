@@ -57,7 +57,7 @@ export default class GlobalStatistics {
     return allCases;
   }
 
-  searchHandler() {
+  searchHandler = () => {
     const searchInput = document.querySelector('.search-input');
 
     const val = searchInput.value;
@@ -78,14 +78,14 @@ export default class GlobalStatistics {
     }
   }
 
-  closeSearchBox() {
+  closeSearchBox = () => {
     const searchInput = document.querySelector('.search-input');
     const globalCase = document.querySelector('.all-cases-number');
     searchInput.classList.add('hide');
     globalCase.classList.remove('hide');
   }
 
-  openSearchBox() {
+  openSearchBox = () => {
     const searchInput = document.querySelector('.search-input');
     const globalCase = document.querySelector('.all-cases-number');
     searchInput.classList.toggle('hide');
