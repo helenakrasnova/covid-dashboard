@@ -19,12 +19,14 @@ export default class CovidMapService {
       tableData.countrySlug,
       countryData?.Lat,
       countryData?.Lon,
-      null,
     );
     return covidMapModel;
   }
 
   async getCountryData(countrySlug) {
+    if (!countrySlug) {
+      return null;
+    }
     const url = `${this.baseUrl}/country/${countrySlug}?from=2020-12-01&to=2020-12-02`;
     const result = await fetch(url, {
       headers: {

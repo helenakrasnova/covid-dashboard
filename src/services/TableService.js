@@ -11,7 +11,11 @@ export default class TableService {
     const results = await this.getSummary();
     const total = results.Countries.map((item) => {
       const tableRow = new TableRowModel(
-        item.Country, item.TotalConfirmed, item.TotalRecovered, item.TotalDeaths, item.Slug,
+        item.Country,
+        item.TotalConfirmed,
+        item.TotalRecovered,
+        item.TotalDeaths,
+        item.Slug,
       );
       return tableRow;
     });
@@ -22,7 +26,11 @@ export default class TableService {
     const results = await this.getSummary();
     const lastDay = results.Countries.map((item) => {
       const tableRow = new TableRowModel(
-        item.Country, item.NewConfirmed, item.NewRecovered, item.NewDeaths, item.Slug,
+        item.Country,
+        item.NewConfirmed,
+        item.NewRecovered,
+        item.NewDeaths,
+        item.Slug,
       );
       return tableRow;
     });
@@ -38,6 +46,7 @@ export default class TableService {
         item.TotalRecovered,
         item.TotalDeaths,
         item?.Premium?.CountryStats?.Population ?? 1,
+        item.Slug,
       );
       return row;
     });
@@ -53,18 +62,26 @@ export default class TableService {
         item.NewRecovered,
         item.NewDeaths,
         item?.Premium?.CountryStats?.Population ?? 1,
+        item.Slug,
       );
       return row;
     });
     return lastDay;
   }
 
-  calculateRelativeTableRow(country, itemConfirmed, itemRecovered, itemDeaths, itemPopulation) {
+  calculateRelativeTableRow(
+    country,
+    itemConfirmed,
+    itemRecovered,
+    itemDeaths,
+    itemPopulation,
+    countrySlug,
+  ) {
     const confirmed = Math.trunc((itemConfirmed * this.populationCoefficient) / itemPopulation);
     const recovered = Math.trunc((itemRecovered * this.populationCoefficient) / itemPopulation);
     const deaths = Math.trunc((itemDeaths * this.populationCoefficient) / itemPopulation);
     const tableRow = new TableRowModel(
-      country, confirmed, recovered, deaths,
+      country, confirmed, recovered, deaths, countrySlug,
     );
     return tableRow;
   }

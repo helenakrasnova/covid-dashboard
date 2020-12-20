@@ -4,11 +4,14 @@ import TableService from '../../services/TableService';
 // import 'leaflet/dist/leaflet.css';
 
 export default class CovidMap {
-  constructor() {
+  constructor(onMapCountryClicked) {
+    this.onMapCountryClicked = onMapCountryClicked;
     this.covidMapService = new CovidMapService();
     this.tableService = new TableService();
     this.cachedMapData = null;
     this.legendValues = [0, 1000, 5000, 10000, 50000, 100000, 500000, 1000000];
+    this.layer = null;
+    this.covidMap = null;
   }
 
   createMap = () => {
@@ -32,19 +35,34 @@ export default class CovidMap {
     return covidMap;
   }
 
-  async render() {
-    const covidMap = this.createMap();
-    const tableData = await this.tableService.get(true, false);
-    for (let i = 0; i < tableData.length; i += 1) {
+  update = async (isAbsoluteValues, isLatestDay, currentCountry) => {
+    if (this.covidMap.hasLayer(this.layer)) {
+      this.covidMap.removeLayer(this.layer);
+    }
+    await this.render(isAbsoluteValues, isLatestDay, currentCountry);
+  }
+
+  async render(isAbsoluteValues, isLatestDay, currentCountry) {
+    if (!this.covidMap) {
+      this.covidMap = this.createMap();
+      const legend = this.createLegend();
+      legend.addTo(this.covidMap);
+    }
+    const tableData = await this.tableService.get(isAbsoluteValues, isLatestDay, currentCountry);
+    const circleArray = [];
+    // eslint-disable-next-line new-cap
+    this.layer = new L.layerGroup(circleArray);
+    this.layer.addTo(this.covidMap);
+    // for (let i = 0; i < tableData.length; i += 1) {
+    for (let i = 0; i < 5; i += 1) {
       // eslint-disable-next-line no-await-in-loop
       const covidMapData = await this.covidMapService.getCovidMapData(tableData[i]);
       const circle = this.createCircle(covidMapData);
       if (circle) {
-        circle.addTo(covidMap);
+        //   circle.addTo(this.covidMap);
+        circle.addTo(this.layer);
       }
     }
-    const legend = this.createLegend();
-    legend.addTo(covidMap);
   }
 
   createCircle = (covidMapData) => {
@@ -58,9 +76,15 @@ export default class CovidMap {
       };
       const circle = L.circle(circleCenter, 50000, circleOptions)
         .bindPopup(`${covidMapData.country} confirmed - ${covidMapData.confirmed}`).openPopup();
+      circle.country = covidMapData.country;
+      circle.on('click', this.circleClicked);
       return circle;
     }
     return null;
+  }
+
+  circleClicked = (event) => {
+    this.onMapCountryClicked(event.target.country);
   }
 
   getCircleColor = (value) => {
