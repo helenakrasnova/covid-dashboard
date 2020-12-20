@@ -1,5 +1,5 @@
 .table-box {
-  width: 338px;
+  width: 340px;
   overflow-y: scroll;
   height: 300px;
   border: 1px solid #363636;
@@ -30,6 +30,7 @@
   border-collapse: collapse;
   word-wrap: break-word;
   background: #222;
+  font-size: 16px;
 }
 
 th, td, th {
