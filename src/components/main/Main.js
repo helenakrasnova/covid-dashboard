@@ -1,6 +1,7 @@
 import Table from '../table/Table';
 import List from '../list/List';
-import Chart from '../chart/Chart'
+import Chart from '../chart/Chart';
+
 export default class Main {
   constructor() {
     this.table = new Table();
