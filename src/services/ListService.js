@@ -1,5 +1,4 @@
 import ListItemModelAllTime from '../models/ListModels';
-import ListItemModelPerDay from '../models/ListModels';
 
 export default class ListService {
   constructor() {
@@ -26,7 +25,7 @@ export default class ListService {
   async getOneDayCases() {
     const result = await this.sendRequest();
     const total = result.Countries.map((item) => {
-      const listItem = new ListItemModelPerDay(
+      const listItem = new ListItemModelAllTime(
         item.Country, item.NewConfirmed, item.NewRecovered, item.NewDeaths, item.CountryCode,
       );
       return listItem;
@@ -44,7 +43,7 @@ export default class ListService {
     });
     const result = await request.json();
     const total = result.Countries.map((item) => {
-      const listItem = new ListItemModelPerDay(
+      const listItem = new ListItemModelAllTime(
         item.Country,
         Math.trunc(item.IncidenceRiskConfirmedPerHundredThousand),
         Math.trunc(item.IncidenceRiskNewConfirmedPerHundredThousand),
