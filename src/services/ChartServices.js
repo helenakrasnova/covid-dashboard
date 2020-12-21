@@ -21,19 +21,23 @@ export default class ChartService {
 
   async getNewCases() {
     const result = await this.sendRequest('https://corona-api.com/timeline');
-    this.newCases.push(Object.fromEntries(result.data.map((item) => {
+    this.newCases.push(Object.fromEntries(result.data.filter(filterItem => filterItem.date !=='2020-12-11').map((item) => {
       const arr = [item.date, item.new_confirmed];
       return arr;
-    }).reverse()));
+    }).reverse().slice(0,-1)));
 
     this.newCases.push(Object.fromEntries(result.data.map((item) => {
       const arr = [item.date, item.new_deaths];
       return arr;
-    }).reverse()));
-    this.newCases.push(Object.fromEntries(result.data.map((item) => {
-      const arr = [item.date, item.new_recovered];
-      return arr;
-    }).reverse()));
+    }).reverse().slice(0,-1)));
+    const newRec = result.data.filter(filterItem => filterItem.date !=='2020-12-12' && filterItem.date !=='2020-10-31' ).map((item) => {
+        const arr = [item.date, item.new_recovered];
+        return arr;
+
+    }).reverse().slice(0,-1)
+    console.log(newRec)
+    this.newCases.push(Object.fromEntries(newRec));
+
   }
 
   async getOneDayCountryCases() {
