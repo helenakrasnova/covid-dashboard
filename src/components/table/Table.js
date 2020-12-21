@@ -1,11 +1,14 @@
 import TableService from '../../services/TableService';
 
 export default class Table {
-  constructor() {
+  constructor(onDateRangeClicked, onNumberFormatsClicked) {
+    this.onDateRangeClicked = onDateRangeClicked;
+    this.onNumberFormatsClicked = onNumberFormatsClicked;
     this.tableService = new TableService();
     this.state = {
       isAbsoluteValues: true,
       isLatestDay: false,
+      country: null,
     };
   }
 
@@ -18,10 +21,13 @@ export default class Table {
   }
 
   async update(country) {
+    this.setState({
+      country,
+    });
     const tableData = await this.tableService.get(
       this.state.isAbsoluteValues,
       this.state.isLatestDay,
-      country,
+      this.state.country,
     );
     this.render(tableData);
   }
@@ -42,26 +48,30 @@ export default class Table {
     this.state = { ...this.state, ...newState };
   }
 
-  onDateRangeClicked = async () => {
+  handleDateRangeClicked = async () => {
     this.setState({
       isLatestDay: !this.state.isLatestDay,
     });
     const tableData = await this.tableService.get(
       this.state.isAbsoluteValues,
       this.state.isLatestDay,
+      this.state.country,
     );
     this.render(tableData);
+    this.onDateRangeClicked(this.state.isLatestDay);
   }
 
-  onNumberFormatsClicked = async () => {
+  handleNumberFormatsClicked = async () => {
     this.setState({
       isAbsoluteValues: !this.state.isAbsoluteValues,
     });
     const tableData = await this.tableService.get(
       this.state.isAbsoluteValues,
       this.state.isLatestDay,
+      this.state.country,
     );
     this.render(tableData);
+    this.onNumberFormatsClicked(this.state.isAbsoluteValues);
   }
 
   render = (tableData) => {
@@ -101,10 +111,10 @@ export default class Table {
     const checkbox = document.querySelector('#table-select');
     const secondCheckbox = document.querySelector('#table-selectBy');
     checkbox.addEventListener('click', () => {
-      this.onDateRangeClicked();
+      this.handleDateRangeClicked();
     });
     secondCheckbox.addEventListener('click', () => {
-      this.onNumberFormatsClicked();
+      this.handleNumberFormatsClicked();
     });
   }
 
