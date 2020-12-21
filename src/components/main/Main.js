@@ -1,6 +1,7 @@
 import Table from '../table/Table';
 import List from '../list/List';
 import CovidMap from '../covidMap/CovidMap';
+import Chart from '../chart/Chart';
 
 export default class Main {
   constructor() {
@@ -13,6 +14,7 @@ export default class Main {
       currentCountry: null,
       distributionParam: null,
     };
+    this.chart = new Chart();
   }
 
   async init() {
@@ -24,7 +26,8 @@ export default class Main {
         this.state.isLatestDay,
         this.state.currentCountry,
       ),
-      this.list.initList()]);
+      this.list.initList(),
+      this.chart.initChart()]);
   }
 
   setState = (newState) => {

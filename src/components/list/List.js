@@ -113,7 +113,7 @@ export default class List {
     return listItemArray;
   }
 
-  sortListArray(array, state = true) {
+  sortListArray = (array, state = true) => {
     let sortedArray = array.sort((a, b) => {
       const firstItem = a.childNodes[0].childNodes[0].textContent;
       const secondItem = b.childNodes[0].childNodes[0].textContent;
@@ -126,7 +126,7 @@ export default class List {
     return sortedArray;
   }
 
-  getCountryFlag(country) {
+  getCountryFlag = (country) => {
     const flag = document.createElement('img');
     flag.classList.add(`${country.countryCode}-flag`);
     flag.setAttribute('alt', `${country.country} flag`);
@@ -224,7 +224,7 @@ export default class List {
     }
   }
 
-  removeChildren(myNode) {
+  removeChildren = (myNode) => {
     while (myNode.firstChild) {
       myNode.removeChild(myNode.firstChild);
     }
@@ -303,7 +303,7 @@ export default class List {
     const listItems = this.sortListArray(this.createListItems(globalCountry));
     const list = await this.createList(listItems);
     this.sortedCountry = listItems;
-    container.appendChild(list)
+    container.appendChild(list);
     return list;
   }
 }
