@@ -129,7 +129,6 @@ async initChart() {
   this.chartService.getNewCases();
   await this.chartService.getGlobalCases();
   const container = document.querySelector('.container');
-  await this.chartDataHandler();
   container.appendChild(this.createChart());
   this.data = this.chartService.globalData;
   this.chart = new ChartModel(this.data.cases);
