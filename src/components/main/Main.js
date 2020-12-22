@@ -21,12 +21,12 @@ export default class Main {
     this.render();
     await Promise.all([
       this.table.init(),
+      this.list.initList(),
       this.covidMap.render(
         this.state.isAbsoluteValues,
         this.state.isLatestDay,
         this.state.currentCountry,
       ),
-      this.list.initList(),
       this.chart.initChart()]);
   }
 
@@ -36,8 +36,27 @@ export default class Main {
 
   render = () => {
     const container = document.createElement('div');
-    document.body.append(container);
+    document.body.prepend(container);
     container.className = 'container';
+    const title = document.createElement('div');
+    document.body.prepend(title);
+    title.className = 'title';
+    title.textContent = 'Covid-19 Dashboard for RSS-2020Q3';
+    const containerColumn = document.createElement('div');
+    container.append(containerColumn);
+    containerColumn.className = 'container-column';
+    const mapContainer = document.createElement('div');
+    container.append(mapContainer);
+    mapContainer.className = 'map-container';
+    const tableContainer = document.createElement('div');
+    containerColumn.append(tableContainer);
+    tableContainer.className = 'table-container';
+    const listContainer = document.createElement('div');
+    container.append(listContainer);
+    listContainer.className = 'list-main-container';
+    const chartContainer = document.createElement('div');
+    containerColumn.append(chartContainer);
+    chartContainer.className = 'chart-main-container';
   }
 
   onMapCountryClicked = async (countryName) => {

@@ -15,10 +15,10 @@ export default class CovidMap {
   }
 
   createMap = () => {
-    const container = document.querySelector('.container');
+    const mapContainer = document.querySelector('.map-container');
     const mapDiv = document.createElement('div');
     mapDiv.id = 'covidMap';
-    container.append(mapDiv);
+    mapContainer.append(mapDiv);
     const southWest = L.latLng(-89.98155760646617, -180);
     const northEast = L.latLng(89.99346179538875, 180);
     const bounds = L.latLngBounds(southWest, northEast);

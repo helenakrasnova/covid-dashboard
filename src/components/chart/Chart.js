@@ -108,30 +108,30 @@ export default class Chart {
     document.querySelector('.chart-container-wrapper').appendChild(this.createCanvas());
   }
 
-createCanvas = () => {
-  const canvas = document.createElement('canvas');
-  canvas.setAttribute('id', 'chart');
-  return canvas;
-}
+  createCanvas = () => {
+    const canvas = document.createElement('canvas');
+    canvas.setAttribute('id', 'chart');
+    return canvas;
+  }
 
-createChart() {
-  const chartContainer = document.createElement('section');
-  const chartWrapper = document.createElement('div');
-  chartWrapper.classList.add('chart-container-wrapper');
-  chartContainer.classList.add('chart-container');
-  chartWrapper.appendChild(this.createCanvas());
-  chartContainer.appendChild(this.createChartHeader());
-  chartContainer.appendChild(chartWrapper);
-  return chartContainer;
-}
+  createChart() {
+    const chartContainer = document.createElement('section');
+    const chartWrapper = document.createElement('div');
+    chartWrapper.classList.add('chart-container-wrapper');
+    chartContainer.classList.add('chart-container');
+    chartWrapper.appendChild(this.createCanvas());
+    chartContainer.appendChild(this.createChartHeader());
+    chartContainer.appendChild(chartWrapper);
+    return chartContainer;
+  }
 
-async initChart() {
-  this.chartService.getNewCases();
-  await this.chartService.getGlobalCases();
-  const container = document.querySelector('.container');
-  container.appendChild(this.createChart());
-  this.data = this.chartService.globalData;
-  this.chart = new ChartModel(this.data.cases);
-  this.chart.createChart();
-}
+  async initChart() {
+    this.chartService.getNewCases();
+    await this.chartService.getGlobalCases();
+    const chartContainer = document.querySelector('.chart-main-container');
+    chartContainer.appendChild(this.createChart());
+    this.data = this.chartService.globalData;
+    this.chart = new ChartModel(this.data.cases);
+    this.chart.createChart();
+  }
 }
