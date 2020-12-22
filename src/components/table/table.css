@@ -1,5 +1,5 @@
 .table-box {
-  width: 338px;
+  width: 340px;
   overflow-y: scroll;
   height: 300px;
   border: 1px solid #363636;
@@ -30,6 +30,7 @@
   border-collapse: collapse;
   word-wrap: break-word;
   background: #222;
+  font-size: 16px;
 }
 
 th, td, th {
@@ -98,7 +99,7 @@ th {
 }
 
 #table-select:checked~[for="table-select"]:after, #table-selectBy:checked~[for="table-selectBy"]:after {
-  left: 42px;
+  left: 36px;
 }
 
 #table-select:checked~[for="table-select"], #table-selectBy:checked~[for="table-selectBy"] {
