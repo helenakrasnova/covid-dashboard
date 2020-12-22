@@ -294,25 +294,24 @@ export default class List {
     }
   }
 
-   clickedCountry = async (event) => {
-     const a = event.target.closest('.country');
+  clickedCountry = async (event) => {
+    const a = event.target.closest('.country');
+    if (!a) {
+      return;
+    }
+    const b = await a;
+    return b.classList[1];
+  }
 
-     if (!a) {
-       return;
-     }
-     const b = await a;
-     return b.classList[1];
-   }
-
-   async initList() {
-     const container = document.querySelector('.container');
-     await this.listServices.getTotalCases();
-     await this.listServices.getOneDayCases();
-     const globalCountry = this.listServices.globalData;
-     const listItems = this.sortListArray(this.createListItems(globalCountry));
-     const list = await this.createList(listItems);
-     this.sortedCountry = listItems;
-     container.appendChild(list);
-     return list;
-   }
+  async initList() {
+    const container = document.querySelector('.list-main-container');
+    await this.listServices.getTotalCases();
+    await this.listServices.getOneDayCases();
+    const globalCountry = this.listServices.globalData;
+    const listItems = this.sortListArray(this.createListItems(globalCountry));
+    const list = await this.createList(listItems);
+    this.sortedCountry = listItems;
+    container.appendChild(list);
+    return list;
+  }
 }

@@ -30,6 +30,7 @@ export default class ChartService {
       const arr = [item.date, item.new_recovered];
       return arr;
     }).reverse().slice(0, -1);
+
     this.newCases.push(Object.fromEntries(newRec));
   }
 
@@ -64,25 +65,25 @@ export default class ChartService {
     return countryArr;
   }
 
-   calculateDayData = async (obj) => {
-     const arr = await Object.entries(obj);
-     const resArr = [];
-     for (let i = 0; i < arr.length; i++) {
-       const newArr = [];
-       if (i + 1 !== arr.length) {
-         newArr.push(arr[i + 1][0]);
-         newArr.push(arr[i + 1][1] - arr[i][1]);
-         resArr.push(newArr);
-       }
-     }
+  calculateDayData = async (obj) => {
+    const arr = await Object.entries(obj);
+    const resArr = [];
+    for (let i = 0; i < arr.length; i++) {
+      const newArr = [];
+      if (i + 1 !== arr.length) {
+        newArr.push(arr[i + 1][0]);
+        newArr.push(arr[i + 1][1] - arr[i][1]);
+        resArr.push(newArr);
+      }
+    }
 
-     return Object.fromEntries(resArr.filter((item) => item[1] > 0));
-   }
+    return Object.fromEntries(resArr.filter((item) => item[1] > 0));
+  }
 
-   async sendRequest(url = this.baseUrl) {
-     const result = await fetch(url);
-     const covidInfo = await result.json();
-     this.allData = covidInfo;
-     return covidInfo;
-   }
+  async sendRequest(url = this.baseUrl) {
+    const result = await fetch(url);
+    const covidInfo = await result.json();
+    this.allData = covidInfo;
+    return covidInfo;
+  }
 }

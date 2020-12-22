@@ -75,12 +75,12 @@ export default class Table {
   }
 
   render = (tableData) => {
-    const container = document.querySelector('.container');
+    const tableContainer = document.querySelector('.table-container');
     let tableComponent = document.querySelector('.table-component');
     if (!tableComponent) {
       tableComponent = document.createElement('div');
       tableComponent.className = 'table-component';
-      container.append(tableComponent);
+      tableContainer.append(tableComponent);
     }
     tableComponent.innerHTML = '';
     const tableBox = document.createElement('div');

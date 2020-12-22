@@ -176,9 +176,8 @@ export default class Chart {
     this.chartService.getNewCases();
     await this.chartService.getGlobalCases();
     const container = document.querySelector('.container');
-
-    container.appendChild(this.createChart());
-
+    const chartContainer = document.querySelector('.chart-main-container');
+    chartContainer.appendChild(this.createChart());
     this.data = this.chartService.globalData;
     this.chart = new ChartModel(this.data.cases);
     this.chart.createChart();
