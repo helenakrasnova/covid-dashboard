@@ -3,20 +3,34 @@
   margin: 0;
   box-sizing:border-box;
 }
-:root {
-  font-size: 10px;
-}
+
 .list-container {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  width: 27rem;
+  width: 23rem;
   height: 50%;
   padding: 0 1rem;
   margin-left: 1rem;
   border: 1px solid black;
+  font-size: 10px;
   background-color: white;
+}
+.list-wrapper::-webkit-scrollbar {
+  width: 4px;
+}
+
+.list-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.list-wrapper::-webkit-scrollbar-thumb {
+  background: #4d3c31;
+}
+
+.list-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #201f20;
 }
 .all-cases {
   display: flex;
@@ -24,7 +38,7 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 9rem;
+  height: 7rem;
 }
 .all-cases-wrapper {
   display: flex;
@@ -43,13 +57,13 @@
 .all-cases-text {
   width: 100%;
   text-align: center;
-    font: normal normal 1.1rem/110% Arial sans-serif;
+    font: normal normal 0.8rem/110% Arial sans-serif;
 
 }
 
 .all-cases-number {
   text-align: center;
-  font: normal normal 3rem/110% Arial sans-serif;
+  font: normal normal 2.4rem/110% Arial sans-serif;
 }
 
 .list-header {
@@ -79,7 +93,7 @@
 }
 
 .search-input {
-  height: 3.2rem;
+  height: 2.5rem;
   width: 12rem;
 
 }
@@ -87,9 +101,9 @@
   cursor: pointer;
 }
 .header-text {
-  width: 14.5rem;
+  width: 12.5rem;
   text-align: center;
-  font: normal normal 2rem/110% 'Times New Roman', sans-serif;
+  font: normal normal 1.5rem/110% 'Times New Roman', sans-serif;
 }
 .header-text:hover {
   cursor: pointer;
@@ -110,21 +124,7 @@
   overflow-x: auto;
 
 }
-::-webkit-scrollbar {
-  width: 4px;
-}
 
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #4d3c31;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #201f20;
-}
 .main-list > li {
   display: flex;
   justify-content: space-between;
@@ -140,11 +140,11 @@
 .main-list > li .cases,
 .main-list > li .country {
   text-align: left;
-  font: normal normal 1.5rem/110% Arial, sans-serif;
+  font: normal normal 1rem/110% Arial, sans-serif;
 }
 
 .main-list > li .country {
-  margin-left: 1rem;
+  margin-left: 0.6rem;
 }
 
 

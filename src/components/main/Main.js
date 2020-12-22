@@ -14,7 +14,7 @@ export default class Main {
       currentCountry: null,
       distributionParam: null,
     };
-    this.chart = new Chart();
+    this.chart = new Chart(this.list.flags.listDataOrder, this.list.clickedCountry);
   }
 
   async init() {
