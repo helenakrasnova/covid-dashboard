@@ -35,7 +35,6 @@ export default class List {
     container.appendChild(allCasesBlock);
     container.appendChild(this.createListHeader());
     container.appendChild(listWrapper);
-
     return container;
   }
 
@@ -168,7 +167,7 @@ export default class List {
       this.setPopulCoefStatistics();
     } else if (this.flags.listDataOrder === 2) {
       header.textContent = this.headerTitles[2];
-      listWrapper.innerHTML = '';
+      this.removeChildren(listWrapper);
       let currentArray = await this.sortListArray(this.createListItems(globalData));
       if (this.flags.isDayData) {
         currentArray = await this.sortListArray(this.createListItems(this.listServices.dayData));
@@ -295,15 +294,24 @@ export default class List {
     }
   }
 
+  clickedCountry = async (event) => {
+    const a = event.target.closest('.country');
+    if (!a) {
+      return;
+    }
+    const b = await a;
+    return b.classList[1];
+  }
+
   async initList() {
-    const listContainer = document.querySelector('.list-main-container');
+    const container = document.querySelector('.list-main-container');
     await this.listServices.getTotalCases();
     await this.listServices.getOneDayCases();
     const globalCountry = this.listServices.globalData;
     const listItems = this.sortListArray(this.createListItems(globalCountry));
     const list = await this.createList(listItems);
     this.sortedCountry = listItems;
-    listContainer.prepend(list);
+    container.appendChild(list);
     return list;
   }
 }
