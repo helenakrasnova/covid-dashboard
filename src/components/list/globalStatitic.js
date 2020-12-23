@@ -59,7 +59,6 @@ export default class GlobalStatistics {
 
   searchHandler = () => {
     const searchInput = document.querySelector('.search-input');
-
     const val = searchInput.value;
     const items = document.querySelectorAll('.list-item');
     if (val !== '') {

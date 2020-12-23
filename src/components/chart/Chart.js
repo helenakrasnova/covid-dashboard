@@ -82,11 +82,11 @@ export default class Chart {
     switchWrapper.appendChild(button);
     switchWrapper.appendChild(labelforButton);
     nextItem.classList.add('next-arrow-chart');
-    nextItem.setAttribute('src', './assets/List/img/next-chart.svg');
+    nextItem.setAttribute('src', './assets/List/img/nextArr.svg');
     nextItem.setAttribute('width', '16');
     nextItem.setAttribute('height', '16');
     prevItem.classList.add('prev-arrow-chart');
-    prevItem.setAttribute('src', './assets/List/img/previous-chart.svg');
+    prevItem.setAttribute('src', './assets/List/img/prevArr.svg');
     prevItem.setAttribute('width', '16');
     prevItem.setAttribute('height', '16');
     prevItem.addEventListener('click', () => {

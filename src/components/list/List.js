@@ -2,7 +2,7 @@ import ListServices from '../../services/ListService';
 import GlobalStatistics from './globalStatitic';
 
 export default class List {
-  constructor() {
+  constructor(onDateRangeClicked, onNumberFormatsClicked) {
     this.globalMethods = new GlobalStatistics();
     this.listServices = new ListServices();
     this.sortedCountry = [];
@@ -13,6 +13,8 @@ export default class List {
     };
     this.populationCoef = 100000;
     this.headerTitles = ['Total Cases', 'Total Deaths', 'Total Recovered'];
+    this.onDateRangeClicked = onDateRangeClicked;
+    this.onNumberFormatsClicked = onNumberFormatsClicked;
   }
 
   async createList(listItems) {
@@ -20,25 +22,31 @@ export default class List {
       .createGlobalSatisticBlock();
     const switchButton = allCasesBlock.childNodes[0].childNodes[0].childNodes[2];
     switchButton.addEventListener('click', () => {
-      this.flags.isPopulationData = !this.flags.isPopulationData;
-      this.setPopulCoefStatistics();
+      // this.flags.isPopulationData = !this.flags.isPopulationData;
+      // this.setPopulCoefStatistics();
+      this.onNumberFormatsClicked(!this.flags.isPopulationData);
     });
     const container = document.createElement('section');
-    const listWrapper = document.createElement('div');
-    const list = document.createElement('ul');
-    listWrapper.classList.add('list-wrapper');
+    container.appendChild(allCasesBlock);
     container.classList.add('list-container');
+    const listHeader = await this.createListHeader();
+
+    container.appendChild(listHeader);
+
+    const listWrapper = document.createElement('div');
+    listWrapper.classList.add('list-wrapper');
+    container.appendChild(listWrapper);
+
+    const list = document.createElement('ul');
+
     list.classList.add('main-list');
     listWrapper.appendChild(list);
     listItems.forEach((item) => list.appendChild(item));
     listWrapper.appendChild(list);
-    container.appendChild(allCasesBlock);
-    container.appendChild(this.createListHeader());
-    container.appendChild(listWrapper);
     return container;
   }
 
-  createListHeader() {
+  async createListHeader() {
     const listHeaderWrapper = document.createElement('div');
     const listHeader = document.createElement('div');
     const listHeaderText = document.createElement('span');
@@ -53,8 +61,9 @@ export default class List {
     prevItem.setAttribute('width', '16');
     prevItem.setAttribute('height', '16');
     listHeaderText.classList.add('header-text');
-    listHeaderText.addEventListener('click', () => {
-      this.setDayData();
+    listHeaderText.addEventListener('click', async () => {
+      //await this.setDayData();
+      this.onDateRangeClicked(!this.flags.isDayData);
     });
     listHeaderText.textContent = 'Total Cases';
     if (this.flags.listDataOrder === 1) {
@@ -74,6 +83,7 @@ export default class List {
     prevItem.addEventListener('click', () => {
       this.prevListData();
     });
+
     return listHeader;
   }
 
@@ -93,7 +103,6 @@ export default class List {
       if (item.country.length >= 24) {
         spanCountry.textContent = item.countryCode;
       }
-
       spanCases.textContent = item.confirmed;
       if (order === 1) {
         spanCases.textContent = item.deaths;
@@ -230,7 +239,6 @@ export default class List {
   }
 
   async setDayData() {
-    this.flags.isDayData = !this.flags.isDayData;
     const { dayData } = this.listServices;
     const { globalData } = this.listServices;
     const wrapper = document.querySelector('.main-list');
@@ -238,19 +246,19 @@ export default class List {
     if (this.flags.isDayData) {
       this.headerTitles = ['Day Cases', 'Day Deaths', 'Day Recovered'];
       headerText.textContent = this.headerTitles[this.flags.listDataOrder];
-      const currentArray = await this.sortListArray(this.createListItems(dayData));
-      wrapper.innerHTML = '';
-      currentArray.forEach((item) => {
-        wrapper.appendChild(item);
-      });
+      // const currentArray = await this.sortListArray(this.createListItems(dayData));
+      // wrapper.innerHTML = '';
+      // currentArray.forEach((item) => {
+      //   wrapper.appendChild(item);
+      // });
     } else {
       this.headerTitles = ['Total Cases', 'Total Deaths', 'Total Recovered'];
       headerText.textContent = this.headerTitles[this.flags.listDataOrder];
-      const currentArray = await this.sortListArray(this.createListItems(globalData));
-      wrapper.innerHTML = '';
-      currentArray.forEach((item) => {
-        wrapper.appendChild(item);
-      });
+      // const currentArray = await this.sortListArray(this.createListItems(globalData));
+      // wrapper.innerHTML = '';
+      // currentArray.forEach((item) => {
+      //   wrapper.appendChild(item);
+      // });
     }
   }
 
@@ -260,37 +268,37 @@ export default class List {
     if (this.flags.listDataOrder === 0 && this.flags.isPopulationData) {
       headerText.textContent = 'Cases on 100000';
       const wrapper = document.querySelector('.main-list');
-      const populationArray = await this.sortListArray(this.createListItems(populationData));
-      wrapper.innerHTML = '';
-      populationArray.forEach((item) => {
-        wrapper.appendChild(item);
-      });
+      // const populationArray = await this.sortListArray(this.createListItems(populationData));
+      // wrapper.innerHTML = '';
+      // populationArray.forEach((item) => {
+      //   wrapper.appendChild(item);
+      // });
     } else if (this.flags.listDataOrder === 1 && this.flags.isPopulationData) {
       headerText.textContent = 'Deaths on 100000';
-      const wrapper = document.querySelector('.main-list');
-      const populationArray = await this.sortListArray(this.createListItems(populationData));
-      wrapper.innerHTML = '';
-      populationArray.forEach((item) => {
-        wrapper.appendChild(item);
-      });
+      // const wrapper = document.querySelector('.main-list');
+      // const populationArray = await this.sortListArray(this.createListItems(populationData));
+      // wrapper.innerHTML = '';
+      // populationArray.forEach((item) => {
+      //   wrapper.appendChild(item);
+      // });
     } else if (this.flags.listDataOrder === 2 && this.flags.isPopulationData) {
       headerText.textContent = 'Recover on 100000';
-      const wrapper = document.querySelector('.main-list');
-      const populationArray = await this.sortListArray(this.createListItems(populationData));
-      wrapper.innerHTML = '';
-      populationArray.forEach((item) => {
-        wrapper.appendChild(item);
-      });
+      // const wrapper = document.querySelector('.main-list');
+      // const populationArray = await this.sortListArray(this.createListItems(populationData));
+      // wrapper.innerHTML = '';
+      // populationArray.forEach((item) => {
+      //   wrapper.appendChild(item);
+      // });
     }
     if (!this.flags.isPopulationData && !this.flags.isDayData) {
       const { globalData } = this.listServices;
       headerText.textContent = this.headerTitles[this.flags.listDataOrder];
-      const wrapper = document.querySelector('.main-list');
-      const populationArray = await this.sortListArray(this.createListItems(globalData));
-      wrapper.innerHTML = '';
-      populationArray.forEach((item) => {
-        wrapper.appendChild(item);
-      });
+      // const wrapper = document.querySelector('.main-list');
+      // const populationArray = await this.sortListArray(this.createListItems(globalData));
+      // wrapper.innerHTML = '';
+      // populationArray.forEach((item) => {
+      //   wrapper.appendChild(item);
+      // });
     }
   }
 
@@ -303,15 +311,47 @@ export default class List {
     return b.classList[1];
   }
 
-  async initList() {
+  async initList(isAbsoluteValues, isLatestDay, country = null) {
     const container = document.querySelector('.list-main-container');
-    await this.listServices.getTotalCases();
-    await this.listServices.getOneDayCases();
-    const globalCountry = this.listServices.globalData;
-    const listItems = this.sortListArray(this.createListItems(globalCountry));
+    container.innerHTML = '';
+    // await this.listServices.getTotalCases();
+    // await this.listServices.getOneDayCases();
+    // await this.listServices.getPopulationData();
+    this.flags.isDayData = isLatestDay;
+    this.flags.isPopulationData = !isAbsoluteValues;
+    const data = await this.get(isAbsoluteValues, isLatestDay, country);
+    // const globalCountry = this.listServices.globalData;
+    const listItems = this.sortListArray(this.createListItems(data));
     const list = await this.createList(listItems);
     this.sortedCountry = listItems;
     container.appendChild(list);
+    await this.setDayData();
+    await this.setPopulCoefStatistics();
+
     return list;
+  }
+
+  async get(isAbsoluteValues, isLatestDay, country = null) {
+    let data;
+
+    const oneDayCases = await this.listServices.getOneDayCases();
+    const totalCases = await this.listServices.getTotalCases();
+    const populationData = await this.listServices.getPopulationData();
+
+    if (isAbsoluteValues) {
+      if (isLatestDay) {
+        data = oneDayCases;
+      } else {
+        data = totalCases;
+      }
+    } else if (isLatestDay) {
+      data = populationData;
+    } else {
+      data = populationData;
+    }
+    if (country) {
+      data = data.filter((item) => item.country === country);
+    }
+    return data;
   }
 }

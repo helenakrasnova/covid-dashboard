@@ -1,13 +1,12 @@
 .table-box {
   width: 340px;
   overflow-y: scroll;
-  height: 300px;
+  height: 26rem;
   border: 1px solid #363636;
 }
 
 .table-component {
   width: 340px;
-  height: 60%;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
@@ -22,7 +21,7 @@
   background-color: #5c5c5c;
 }
 
-.list-wrapper::-webkit-scrollbar-thumb:hover {
+.table-box::-webkit-scrollbar-thumb:hover {
   background: #201f20;
 }
 
@@ -59,16 +58,16 @@ th {
 
 [for="table-select"], [for="table-selectBy"] {
   position: relative;
-  width: 70px;
-  height: 40px;
+  width: 68px;
+  height: 30px;
   margin-top: 3px;
   font-family: sans-serif;
   font-weight: bold;
   align-items: center;
   justify-content: space-between;
   padding-left: 6px;
-  font-size: 12px;
-  border-radius: 20px;
+  font-size: 11px;
+  border-radius: 5px;
   line-height: 10px;
   color: white;
   display: flex;
@@ -85,25 +84,25 @@ th {
 }
 
 [for="table-selectBy"]:before {
-  content: 'rel.';
+  content: 'abs';
 }
 
 [for="table-select"]:after, [for="table-selectBy"]:after {
   content: "";
   position: absolute;
-  left: 5px;
-  top: 5px;
+  left: 4px;
+  top: 3px;
   display: block;
-  width: 30px;
-  height: 30px;
-  border-radius: 50px;
+  width: 29px;
+  height: 23px;
+  border-radius: 5px;
   background: #EBECFB;
   transition: .5s;
   box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.38);
 }
 
 #table-select:checked~[for="table-select"]:after, #table-selectBy:checked~[for="table-selectBy"]:after {
-  left: 36px;
+  left: 35px;
 }
 
 #table-select:checked~[for="table-select"], #table-selectBy:checked~[for="table-selectBy"] {
