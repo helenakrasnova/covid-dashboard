@@ -75,7 +75,6 @@ export default class Main {
     this.setState({
       currentCountry: countryName,
     });
-
     await this.render();
   }
 
@@ -83,7 +82,6 @@ export default class Main {
     this.setState({
       isLatestDay: value,
     });
-
     await this.render();
   }
 

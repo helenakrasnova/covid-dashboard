@@ -4,7 +4,7 @@ export default class GlobalStatistics {
     this.isPopulationData = false;
   }
 
-  async createGlobalSatisticBlock() {
+  async createGlobalStatisticBlock() {
     const allCases = document.createElement('div');
     const allCasesWrapper = document.createElement('div');
     const allCasesText = document.createElement('p');

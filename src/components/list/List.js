@@ -19,7 +19,7 @@ export default class List {
 
   async createList(listItems) {
     const allCasesBlock = await new GlobalStatistics(this.listServices.allCases)
-      .createGlobalSatisticBlock();
+      .createGlobalStatisticBlock();
     const switchButton = allCasesBlock.childNodes[0].childNodes[0].childNodes[2];
     switchButton.addEventListener('click', () => {
       // this.flags.isPopulationData = !this.flags.isPopulationData;

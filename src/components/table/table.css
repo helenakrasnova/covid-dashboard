@@ -108,3 +108,15 @@ th {
 #table-select:checked~[for="table-select"], #table-selectBy:checked~[for="table-selectBy"] {
   background-color: #404040;
 }
+@media screen and (min-width:320px) and (max-width:899px) {
+  .covid-table {
+    font-size: 10px;
+    width: 290px;
+  }
+  .table-box{
+    width: 300px;
+  }
+  .table-component{
+    width: 300px;
+  }
+}

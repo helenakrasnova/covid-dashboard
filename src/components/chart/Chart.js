@@ -188,6 +188,7 @@ export default class Chart {
       const daySwitch = e.target.closest('.header-text');
       if (targetLi) {
         this.isCountryChosen = true;
+        // eslint-disable-next-line prefer-destructuring
         this.chosenCountry = targetLi.classList[1];
         this.updateChart();
       }

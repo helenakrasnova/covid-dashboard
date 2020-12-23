@@ -53,14 +53,12 @@ export default class CovidMap {
     // eslint-disable-next-line new-cap
     this.layer = new L.layerGroup(circleArray);
     this.layer.addTo(this.covidMap);
-    // for (let i = 0; i < tableData.length; i += 1) {
-    for (let i = 0; i < 5; i += 1) {
+    for (let i = 0; i < tableData.length; i += 1) {
       // eslint-disable-next-line no-await-in-loop
       const covidMapData = await this.covidMapService.getCovidMapData(tableData[i]);
       if (covidMapData) {
         const circle = this.createCircle(covidMapData);
         if (circle) {
-          //   circle.addTo(this.covidMap);
           circle.addTo(this.layer);
         }
       }
@@ -76,7 +74,7 @@ export default class CovidMap {
         fillColor: circleColor,
         fillOpacity: 1.0,
       };
-      const circle = L.circle(circleCenter, 100000, circleOptions)
+      const circle = L.circle(circleCenter, 50000, circleOptions)
         .bindPopup(`${covidMapData.country} confirmed - ${covidMapData.confirmed}`).openPopup();
       circle.country = covidMapData.country;
       circle.on('click', this.circleClicked);

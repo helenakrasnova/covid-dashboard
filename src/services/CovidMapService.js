@@ -11,7 +11,6 @@ export default class CovidMapService {
   async getCovidMapData(tableData) {
     // eslint-disable-next-line no-await-in-loop
     const countryData = await this.getCountryData(tableData?.countrySlug);
-
     if (!countryData) {
       return null;
     }
