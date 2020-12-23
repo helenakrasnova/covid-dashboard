@@ -19,8 +19,22 @@ export default class Main {
 
   async init() {
     this.initRender();
-    await this.render();
-    await this.chart.initChart();
+    await Promise.all([
+      this.table.update(
+        this.state.isAbsoluteValues,
+        this.state.isLatestDay,
+        this.state.currentCountry,
+      ),
+      this.list.initList(
+        this.state.isAbsoluteValues,
+        this.state.isLatestDay,
+        this.state.currentCountry,
+      ),
+      this.covidMap.render(
+        this.state.isAbsoluteValues,
+        this.state.isLatestDay,
+        this.state.currentCountry,
+      ), this.chart.initChart()]);
   }
 
   setState = (newState) => {

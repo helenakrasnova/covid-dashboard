@@ -1,7 +1,6 @@
 import * as L from 'leaflet';
 import CovidMapService from '../../services/CovidMapService';
 import TableService from '../../services/TableService';
-// import 'leaflet/dist/leaflet.css';
 
 export default class CovidMap {
   constructor(onMapCountryClicked) {
@@ -30,7 +29,7 @@ export default class CovidMap {
     };
     // eslint-disable-next-line new-cap
     const covidMap = new L.map('covidMap', mapOptions);
-    const layer = new L.TileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png');
+    const layer = new L.TileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png?api_key=064157cb-ed9d-4660-8144-1770979f20ef');
     covidMap.addLayer(layer);
     return covidMap;
   }
