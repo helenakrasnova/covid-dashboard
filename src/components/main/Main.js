@@ -7,7 +7,7 @@ export default class Main {
   constructor() {
     this.table = new Table(this.onDateRangeClicked, this.onNumberFormatsClicked);
     this.covidMap = new CovidMap(this.onMapCountryClicked);
-    this.list = new List('countries');
+    this.list = new List(this.onDateRangeClicked, this.onNumberFormatsClicked);
     this.state = {
       isAbsoluteValues: true,
       isLatestDay: false,
@@ -18,23 +18,16 @@ export default class Main {
   }
 
   async init() {
-    this.render();
-    await Promise.all([
-      this.table.init(),
-      this.list.initList(),
-      this.covidMap.render(
-        this.state.isAbsoluteValues,
-        this.state.isLatestDay,
-        this.state.currentCountry,
-      ),
-      this.chart.initChart()]);
+    this.initRender();
+    await this.render();
+    await this.chart.initChart();
   }
 
   setState = (newState) => {
     this.state = { ...this.state, ...newState };
   }
 
-  render = () => {
+  initRender = () => {
     const container = document.createElement('div');
     document.body.prepend(container);
     container.className = 'container';
@@ -59,32 +52,45 @@ export default class Main {
     chartContainer.className = 'chart-main-container';
   }
 
+  render = async () => {
+    await Promise.all([
+      this.table.update(
+        this.state.isAbsoluteValues,
+        this.state.isLatestDay,
+        this.state.currentCountry,
+      ),
+      this.list.initList(
+        this.state.isAbsoluteValues,
+        this.state.isLatestDay,
+        this.state.currentCountry,
+      ),
+      this.covidMap.render(
+        this.state.isAbsoluteValues,
+        this.state.isLatestDay,
+        this.state.currentCountry,
+      )]);
+  }
+
   onMapCountryClicked = async (countryName) => {
     this.setState({
       currentCountry: countryName,
     });
-    await this.table.update(this.state.currentCountry);
+
+    await this.render();
   }
 
   onDateRangeClicked = async (value) => {
     this.setState({
       isLatestDay: value,
     });
-    await this.covidMap.update(
-      this.state.isAbsoluteValues,
-      this.state.isLatestDay,
-      this.state.currentCountry,
-    );
+
+    await this.render();
   }
 
   onNumberFormatsClicked = async (value) => {
     this.setState({
       isAbsoluteValues: value,
     });
-    await this.covidMap.update(
-      this.state.isAbsoluteValues,
-      this.state.isLatestDay,
-      this.state.currentCountry,
-    );
+    await this.render();
   }
 }

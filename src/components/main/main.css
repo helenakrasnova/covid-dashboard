@@ -8,12 +8,13 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
   flex-direction: column;
 }
 
 .title {
   color: white;
-  width: 99%;
+  width: 98%;
   height: 4.4rem;
   display: flex;
   align-items: center;
@@ -28,27 +29,83 @@ body {
 
 .container {
   width: 100%;
-
   background-color: black;
   font-family: sans-serif;
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: space-around;
 }
-.container-column{
+
+.container-column {
   width: 25%;
   display: flex;
   align-items: center;
   flex-direction: column;
   flex-wrap: wrap;
+  height: 55rem;
+  justify-content: space-between;
 }
+
 .list-main-container {
   width: 20%;
 }
+
 .map-container {
   width: 50%;
 }
-.chart-main-container{
+
+.chart-main-container {
   width: 100%;
 }
 
+@media screen and (min-width:900px) and (max-width:1349px) {
+  .container {
+    justify-content: space-evenly;
+  }
+  .container-column {
+    order: 3;
+    width: 98%;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+    height: 38rem;
+  }
+  .list-main-container {
+    order: 2;
+    width: 22%;
+    height: 55rem;
+  }
+  .map-container {
+    order: 1;
+  }
+  .chart-main-container {
+    width: 50%;
+  }
+  .table-box {
+    width: 31rem;
+  }
+}
+
+@media screen and (min-width:320px) and (max-width:899px) {
+  .container {
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+  .container-column {
+    order: 3;
+    width: 98%;
+  }
+  .list-main-container {
+    order: 2;
+    height: 25rem;
+    margin-top: 1rem;
+    width: 27rem;
+  }
+  .map-container {
+    order: 1;
+    width: 95%;
+  }
+}

@@ -161,10 +161,19 @@
 }
 
 .hide {
-  display: none;
+  display: none !important;
   transition: all 0.6s
 }
 
 .prev-arrow, .next-arrow {
   filter: invert(75%);
+}
+
+.prev-arrow:hover, .next-arrow:hover {
+  filter: invert(55%);
+}
+@media screen and (min-width:320px) and (max-width:899px) {
+  .list-container{
+    height: 25rem;
+  }
 }

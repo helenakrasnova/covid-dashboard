@@ -12,16 +12,10 @@ export default class Table {
     };
   }
 
-  async init() {
-    const tableData = await this.tableService.get(
-      this.state.isAbsoluteValues,
-      this.state.isLatestDay,
-    );
-    this.render(tableData);
-  }
-
-  async update(country) {
+  async update(isAbsoluteValues, isLatestDay, country) {
     this.setState({
+      isAbsoluteValues,
+      isLatestDay,
       country,
     });
     const tableData = await this.tableService.get(
@@ -30,6 +24,10 @@ export default class Table {
       this.state.country,
     );
     this.render(tableData);
+    const checkbox = document.querySelector('#table-select');
+    const secondCheckbox = document.querySelector('#table-selectBy');
+    checkbox.checked = this.state.isLatestDay;
+    secondCheckbox.checked = this.state.isAbsoluteValues;
   }
 
   createHeadCell = (text, trHeading) => {
@@ -107,7 +105,7 @@ export default class Table {
     }
 
     this.createTableToggle('table-select', this.state.isLatestDay, 'all<br>time');
-    this.createTableToggle('table-selectBy', this.state.isAbsoluteValues, 'abs.');
+    this.createTableToggle('table-selectBy', this.state.isAbsoluteValues, 'rel');
     const checkbox = document.querySelector('#table-select');
     const secondCheckbox = document.querySelector('#table-selectBy');
     checkbox.addEventListener('click', () => {
