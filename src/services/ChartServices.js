@@ -21,7 +21,6 @@ export default class ChartService {
       const arr = [item.date, item.new_confirmed];
       return arr;
     }).reverse().slice(0, -1)));
-
     this.newCases.push(Object.fromEntries(result.data.map((item) => {
       const arr = [item.date, item.new_deaths];
       return arr;
@@ -30,13 +29,11 @@ export default class ChartService {
       const arr = [item.date, item.new_recovered];
       return arr;
     }).reverse().slice(0, -1);
-
     this.newCases.push(Object.fromEntries(newRec));
   }
 
   async getSingleCountryData(req) {
     const result = await this.sendRequest(req);
-
     const countryArr = [];
     countryArr.push(Object.fromEntries(result.filter((item) => item.Province === '').map((item) => {
       const dayArr = [item.Date.slice(0, -10), item.Confirmed];
@@ -61,7 +58,6 @@ export default class ChartService {
     countryArr.push(await this.calculateDayData(total.timeline.deaths));
     countryArr.push(await this.calculateDayData(total.timeline.recovered));
     this.singleCountryDayData = await countryArr;
-
     return countryArr;
   }
 

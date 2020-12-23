@@ -13,7 +13,6 @@ export default class ListService {
     if (this.globalData && this.globalData.length > 0) {
       return this.globalData;
     }
-
     const result = await this.sendRequest();
     this.allCases = result.Global;
     const total = result.Countries.map((item) => {
@@ -30,7 +29,6 @@ export default class ListService {
     if (this.dayData && this.dayData.length > 0) {
       return this.dayData;
     }
-
     const result = await this.sendRequest();
     const total = result.Countries.map((item) => {
       const listItem = new ListItemModelAllTime(
@@ -38,7 +36,6 @@ export default class ListService {
       );
       return listItem;
     });
-
     this.dayData = total;
     return total;
   }
@@ -47,7 +44,6 @@ export default class ListService {
     if (this.populationCoefData && this.populationCoefData.length > 0) {
       return this.populationCoefData;
     }
-
     const request = await fetch(`${this.baseUrl}/premium/summary`, {
       headers: {
         'X-Access-Token': '5cf9dfd5-3449-485e-b5ae-70a60e997864',

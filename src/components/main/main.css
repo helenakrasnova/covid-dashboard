@@ -47,9 +47,9 @@ body {
   justify-content: space-between;
 }
 
-.list-main-container {
+/* .list-main-container {
   width: 20%;
-}
+} */
 
 .map-container {
   width: 50%;
@@ -71,6 +71,7 @@ body {
     flex-wrap: wrap;
     flex-direction: row;
     height: 38rem;
+    margin-bottom: 3rem;
   }
   .list-main-container {
     order: 2;
@@ -97,15 +98,22 @@ body {
   .container-column {
     order: 3;
     width: 98%;
+    margin-bottom: 1rem;
+    height: 71rem;
   }
   .list-main-container {
     order: 2;
     height: 25rem;
     margin-top: 1rem;
+    margin-bottom: 1rem;
     width: 27rem;
   }
   .map-container {
     order: 1;
     width: 95%;
+  }
+  .title{
+    font-size: 1.9rem;
+    text-align: center;
   }
 }
