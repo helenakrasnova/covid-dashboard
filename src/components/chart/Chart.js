@@ -75,6 +75,7 @@ export default class Chart {
     button.setAttribute('type', 'checkbox');
     button.setAttribute('id', 'chart-selectBy');
     labelforButton.setAttribute('for', 'chart-selectBy');
+    labelforButton.innerHTML = 'New';
     button.addEventListener('click', () => {
       this.switchHandler();
     });

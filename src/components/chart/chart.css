@@ -23,14 +23,10 @@
  }
 
  [for="chart-selectBy"]:before {
-   content: "NEW";
+ content: "All";
    position: absolute;
    right: 0px;
    padding-right: 4px;
- }
-
- [for="chart-selectBy"]:before {
-   content: 'ALL';
  }
 
  [for="chart-selectBy"]:after {
